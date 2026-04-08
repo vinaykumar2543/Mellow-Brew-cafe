@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Mellow Brew | Artisan Coffee & Cozy Vibes</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fef7f0;
+      overflow-x: hidden;
+    }
+    /* Login Overlay */
+    .login-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+    .login-card {
+      background: #fffaf5;
+      border-radius: 2rem;
+      padding: 2rem 1.8rem;
+      max-width: 460px;
+      width: 90%;
+      box-shadow: 0 25px 45px -12px rgba(0,0,0,0.3);
+      border: 1px solid #f0e2d4;
+    }
+    .login-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: #6b3e26;
+    }
+    .auth-type {
+      background: #f1e5db;
+      border-radius: 3rem;
+      display: flex;
+      padding: 0.3rem;
+      margin: 1.5rem 0;
+    }
+    .auth-option {
+      flex: 1;
+      text-align: center;
+      padding: 0.6rem 0;
+      border-radius: 2rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #8b6246;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .auth-option.active {
+      background: white;
+      color: #5e3a28;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    input[type="radio"] { display: none; }
+    .input-group { margin-bottom: 1.5rem; }
+    .input-wrapper {
+      position: relative;
+      width: 100%;
+    }
+    .input-wrapper input {
+      width: 100%;
+      padding: 0.85rem 1rem 0.85rem 2.8rem;
+      border: 1.5px solid #eedbcb;
+      border-radius: 1.2rem;
+      background: white;
+      outline: none;
+    }
+    .input-wrapper input:focus {
+      border-color: #c47a44;
+      box-shadow: 0 0 0 3px rgba(196,122,68,0.2);
+    }
+    .input-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #c18154;
+    }
+    .password-toggle {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: #c18154;
+      cursor: pointer;
+    }
+    .login-btn {
+      width: 100%;
+      background: #6b3e26;
+      border: none;
+      padding: 0.9rem;
+      font-weight: 700;
+      border-radius: 2rem;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: 0.25s;
+    }
+    .login-btn:hover {
+      background: #4f2e1c;
+      transform: scale(1.01);
+    }
+    .error-msg {
+      background: #ffede8;
+      color: #bc5a2c;
+      padding: 0.5rem;
+      border-radius: 1rem;
+      text-align: center;
+      margin-top: 1rem;
+    }
+    /* Main Website */
+    .main-website {
+      display: none;
+    }
+    .navbar-custom {
+      background: #fff9f2;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+      padding: 0.8rem 2rem;
+    }
+    .navbar-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #6b3e26;
+    }
+    .nav-link {
+      color: #5a3a28;
+      font-weight: 500;
+      margin: 0 0.5rem;
+    }
+    .nav-link:hover {
+      color: #c47a44;
+    }
+    .carousel-item img {
+      height: 600px;
+      object-fit: cover;
+    }
+    .carousel-caption {
+      background: rgba(0,0,0,0.5);
+      border-radius: 1rem;
+      bottom: 2rem;
+    }
+    .section-padding {
+      padding: 80px 0;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #5c3a28;
+      text-align: center;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+    .section-title:after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 3px;
+      background: #d48f5b;
+      margin: 0.8rem auto 0;
+    }
+    .menu-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .menu-tab {
+      background: #f1e5db;
+      border: none;
+      padding: 0.6rem 1.8rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      color: #6b3e26;
+      transition: 0.2s;
+    }
+    .menu-tab.active {
+      background: #6b3e26;
+      color: white;
+    }
+    .cafe-card {
+      background: white;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      transition: all 0.3s;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      cursor: pointer;
+      height: 100%;
+    }
+    .cafe-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 30px -12px rgba(0,0,0,0.15);
+    }
+    .card-img {
+      height: 220px;
+      background-size: cover;
+      background-position: center;
+    }
+    .gallery-img {
+      border-radius: 1rem;
+      overflow: hidden;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+    .gallery-img img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      transition: 0.3s;
+    }
+    .gallery-img:hover img {
+      transform: scale(1.05);
+    }
+    .booking-btn {
+      background: #d48f5b;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+    .booking-btn:hover {
+      background: #b87a54;
+      transform: scale(1.02);
+    }
+    footer {
+      background: #2c241e;
+      color: #e2d5c8;
+      padding: 3rem 0 1.5rem;
+    }
+    .footer-links a {
+      color: #d4bcac;
+      text-decoration: none;
+      margin: 0 0.8rem;
+    }
+    .footer-links a:hover { color: #c47a44; }
+    @media (max-width: 768px) {
+      .carousel-item img { height: 350px; }
+      .section-padding { padding: 50px 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-card">
+    <div class="login-header text-center">
+      <h1>☕ Mellow Brew</h1>
+      <p class="text-muted">sign in to explore our cafe</p>
+    </div>
+    <div class="auth-type">
+      <label class="auth-option active" id="useridLabel">
+        <i class="fas fa-id-card"></i> <span>User ID</span>
+        <input type="radio" name="loginMethod" value="userid" checked hidden>
+      </label>
+      <label class="auth-option" id="mobileLabel">
+        <i class="fas fa-mobile-alt"></i> <span>Mobile No.</span>
+        <input type="radio" name="loginMethod" value="mobile" hidden>
+      </label>
+    </div>
+    <div class="input-group">
+      <div class="input-wrapper">
+        <i class="fas fa-user input-icon" id="dynamicIcon"></i>
+        <input type="text" id="identifierInput" placeholder="User ID or Mobile">
+      </div>
+    </div>
+    <div class="input-group">
+      <div class="input-wrapper">
+        <i class="fas fa-lock input-icon"></i>
+        <input type="password" id="passwordInput" placeholder="Password">
+        <button type="button" class="password-toggle" id="togglePasswordBtn"><i class="far fa-eye-slash"></i></button>
+      </div>
+    </div>
+    <button class="login-btn" id="loginBtn"><i class="fas fa-arrow-right-to-bracket"></i> Enter Cafe</button>
+    <div id="loginError" class="error-msg" style="display: none;">Please fill both fields</div>
+    <div class="text-center mt-3 small text-muted">demo: any non-empty credentials</div>
+  </div>
+</div>
+
+<!-- MAIN WEBSITE -->
+<div class="main-website" id="mainWebsite">
+  <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="#"><i class="fas fa-mug-hot"></i> Mellow Brew</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#menu">Menu</a></li>
+          <li class="nav-item"><a class="nav-link" href="#gallery">Gallery</a></li>
+          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+          <li class="nav-item"><button class="booking-btn ms-2" id="exploreCafeBtn"><i class="fas fa-calendar-alt"></i> Explore Cafe</button></li>
+          <li class="nav-item"><button class="btn btn-sm btn-outline-secondary ms-2" id="logoutBtnMain" style="border-color:#d48f5b; color:#6b3e26;"><i class="fas fa-sign-out-alt"></i> Logout</button></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Bootstrap Carousel -->
+  <div id="homeCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="0" class="active"></button>
+      <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="1"></button>
+      <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="2"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=1600&auto=format" class="d-block w-100" alt="Cozy interior">
+        <div class="carousel-caption d-none d-md-block"><h5>Welcome to Mellow Brew</h5><p>Where every cup tells a story</p></div>
+      </div>
+      <div class="carousel-item">
+        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1600&auto=format" class="d-block w-100" alt="Pour over coffee">
+        <div class="carousel-caption d-none d-md-block"><h5>Artisan Coffee</h5><p>Single-origin beans, slow roasted</p></div>
+      </div>
+      <div class="carousel-item">
+        <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1600&auto=format" class="d-block w-100" alt="Fresh pastries">
+        <div class="carousel-caption d-none d-md-block"><h5>Freshly Baked</h5><p>Croissants, scones & daily cakes</p></div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+    <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
+  </div>
+
+  <!-- Menu Section with Two Pages -->
+  <section id="menu" class="section-padding container">
+    <div class="section-title">Our Menu</div>
+    <div class="menu-tabs">
+      <button class="menu-tab active" data-tab="classic">Classic Favorites</button>
+      <button class="menu-tab" data-tab="extra">Extra Delights</button>
+    </div>
+    <div class="row g-4" id="menuGrid"></div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section id="gallery" class="section-padding" style="background: #f9f2ea;">
+    <div class="container">
+      <div class="section-title">Moments at Mellow Brew</div>
+      <div class="row g-3" id="galleryGrid"></div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="section-padding container">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&auto=format" class="img-fluid rounded-4" alt="About us">
+      </div>
+      <div class="col-lg-6 mt-4 mt-lg-0">
+        <h2 class="display-6" style="font-family:'Playfair Display';">Our Story</h2>
+        <p class="lead text-muted">Founded in 2015, Mellow Brew is a sanctuary for coffee lovers and dreamers. We believe in slow mornings, honest ingredients, and the warmth of community.</p>
+        <p>Every bean is ethically sourced, every pastry baked from scratch. Come as you are — leave with a full heart and a great cup.</p>
+        <div class="mt-3"><i class="fas fa-map-marker-alt"></i> 123 Brew Lane, Coffee District</div>
+        <div><i class="fas fa-phone"></i> +1 (555) 678-1234</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact & Hours -->
+  <section id="contact" class="section-padding" style="background: #fff9f2;">
+    <div class="container">
+      <div class="section-title">Visit Us</div>
+      <div class="row text-center">
+        <div class="col-md-4 mb-3"><i class="fas fa-clock fa-2x" style="color:#d48f5b;"></i><h5>Opening Hours</h5><p>Mon-Fri: 7am - 9pm<br>Sat-Sun: 8am - 10pm</p></div>
+        <div class="col-md-4 mb-3"><i class="fas fa-envelope fa-2x" style="color:#d48f5b;"></i><h5>Email Us</h5><p>hello@mellowbrew.com</p></div>
+        <div class="col-md-4 mb-3"><i class="fas fa-instagram fa-2x" style="color:#d48f5b;"></i><h5>Social</h5><p>@mellowbrew_cafe</p></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container text-center">
+      <p>&copy; 2025 Mellow Brew Cafe. All rights reserved.</p>
+      <div class="footer-links"><a href="#">Privacy</a> | <a href="#">Terms</a> | <a href="#">Careers</a></div>
+    </div>
+  </footer>
+</div>
+
+<!-- Modal for Menu Details -->
+<div class="modal fade" id="itemModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title">Item Details</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for Table Booking -->
+<div class="modal fade" id="bookingModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title"><i class="fas fa-calendar-check"></i> Reserve a Table</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body">
+        <form id="bookingForm">
+          <div class="mb-3"><label class="form-label">Your Name</label><input type="text" class="form-control" id="bookingName" required></div>
+          <div class="mb-3"><label class="form-label">Email</label><input type="email" class="form-control" id="bookingEmail" required></div>
+          <div class="mb-3"><label class="form-label">Phone</label><input type="tel" class="form-control" id="bookingPhone" required></div>
+          <div class="mb-3"><label class="form-label">Date</label><input type="date" class="form-control" id="bookingDate" required></div>
+          <div class="mb-3"><label class="form-label">Time</label><input type="time" class="form-control" id="bookingTime" required></div>
+          <div class="mb-3"><label class="form-label">Guests</label><select class="form-select" id="bookingGuests"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7+</option></select></div>
+          <button type="submit" class="btn w-100" style="background:#6b3e26; color:white;">Request Booking</button>
+          <div id="bookingMessage" class="mt-3 text-center small"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Menu Data
+  const classicMenu = [
+    { name: "Salted Caramel Latte", caption: "sweet & salty", desc: "Rich espresso, velvety steamed milk, house-made caramel & sea salt.", price: "$5.25", img: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&auto=format" },
+    { name: "Blueberry Lavender Scone", caption: "floral & buttery", desc: "Flaky scone dotted with wild blueberries, subtle lavender glaze.", price: "$4.50", img: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&auto=format" },
+    { name: "Maple Walnut Cold Brew", caption: "autumn hug", desc: "Slow-steeped cold brew, Vermont maple, walnut foam & cinnamon.", price: "$5.75", img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&auto=format" },
+    { name: "Brown Butter Cookie", caption: "gooey & rich", desc: "Nutty brown butter, dark chocolate chips, flaky sea salt.", price: "$3.75", img: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=600&auto=format" }
+  ];
+  const extraMenu = [
+    { name: "Brown Butter Banana Bread", caption: "melt-in-mouth", desc: "Nutty brown butter, ripe bananas, dark chocolate chunks.", price: "$4.95", img: "https://images.unsplash.com/photo-1607478900766-efe13248b125?w=600&auto=format" },
+    { name: "Smoked Avocado Toast", caption: "hearth-baked", desc: "Sourdough, smoked avocado, pickled red onion & chili flakes.", price: "$7.50", img: "https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=600&auto=format" },
+    { name: "Raspberry Rose Latte", caption: "floral & fruity", desc: "Steamed almond milk, raspberry syrup, dried rose petals.", price: "$5.95", img: "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&auto=format" },
+    { name: "Honey Cinnamon Latte", caption: "golden warmth", desc: "Espresso, steamed oat milk, wild honey & Ceylon cinnamon.", price: "$5.50", img: "https://images.unsplash.com/photo-1570968915860-54d5c92fa2a3?w=600&auto=format" },
+    { name: "Truffle Fries", caption: "savory crisp", desc: "Hand-cut fries tossed in truffle oil, parmesan & parsley.", price: "$6.25", img: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600&auto=format" }
+  ];
+
+  const menuGrid = document.getElementById('menuGrid');
+  let currentMenu = classicMenu;
+
+  function renderMenu(menuArray) {
+    menuGrid.innerHTML = '';
+    menuArray.forEach(item => {
+      const col = document.createElement('div');
+      col.className = 'col-md-6 col-lg-4';
+      col.innerHTML = `
+        <div class="cafe-card">
+          <div class="card-img" style="background-image: url('${item.img}');"></div>
+          <div class="card-content p-3">
+            <h3>${item.name}</h3>
+            <div class="caption text-warning fw-bold">${item.caption}</div>
+            <p>${item.desc.substring(0, 60)}...</p>
+            <div class="fw-bold fs-5" style="color:#6b3e26;">${item.price}</div>
+          </div>
+        </div>
+      `;
+      col.querySelector('.cafe-card').addEventListener('click', () => showModal(item));
+      menuGrid.appendChild(col);
+    });
+  }
+
+  function showModal(item) {
+    const modalBody = document.getElementById('modalBody');
+    modalBody.innerHTML = `
+      <img src="${item.img}" class="img-fluid rounded-3 mb-3">
+      <h3 class="fw-bold">${item.name}</h3>
+      <div class="text-warning fw-bold">${item.caption}</div>
+      <div class="fs-2 fw-bold my-2" style="color:#6b3e26;">${item.price}</div>
+      <p>${item.desc}</p>
+      <hr><small class="text-muted">Available all day • freshly prepared</small>
+    `;
+    new bootstrap.Modal(document.getElementById('itemModal')).show();
+  }
+
+  document.querySelectorAll('.menu-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      currentMenu = tab.dataset.tab === 'classic' ? classicMenu : extraMenu;
+      renderMenu(currentMenu);
+    });
+  });
+  renderMenu(classicMenu);
+
+  // Gallery
+  const galleryImages = [
+    "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&auto=format",
+    "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&auto=format",
+    "https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=600&auto=format",
+    "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&auto=format",
+    "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&auto=format",
+    "https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?w=600&auto=format"
+  ];
+  const galleryGrid = document.getElementById('galleryGrid');
+  galleryImages.forEach(src => {
+    const col = document.createElement('div');
+    col.className = 'col-md-4 col-sm-6';
+    col.innerHTML = `<div class="gallery-img"><img src="${src}" class="img-fluid" alt="cafe gallery"></div>`;
+    galleryGrid.appendChild(col);
+  });
+
+  // Login Logic
+  const loginOverlay = document.getElementById('loginOverlay');
+  const mainWebsite = document.getElementById('mainWebsite');
+  const identifierInput = document.getElementById('identifierInput');
+  const passwordInput = document.getElementById('passwordInput');
+  const loginBtn = document.getElementById('loginBtn');
+  const loginError = document.getElementById('loginError');
+  const togglePasswordBtnLogin = document.getElementById('togglePasswordBtn');
+  const useridLabel = document.getElementById('useridLabel');
+  const mobileLabel = document.getElementById('mobileLabel');
+  const useridRadio = document.querySelector('input[value="userid"]');
+  const mobileRadio = document.querySelector('input[value="mobile"]');
+  const dynamicIcon = document.getElementById('dynamicIcon');
+
+  let passwordVisible = false;
+  togglePasswordBtnLogin.addEventListener('click', () => {
+    passwordVisible = !passwordVisible;
+    passwordInput.type = passwordVisible ? 'text' : 'password';
+    togglePasswordBtnLogin.innerHTML = passwordVisible ? '<i class="far fa-eye"></i>' : '<i class="far fa-eye-slash"></i>';
+  });
+
+  function updateLoginUI() {
+    if (useridRadio.checked) {
+      identifierInput.placeholder = "Enter your User ID";
+      dynamicIcon.className = "fas fa-user input-icon";
+      useridLabel.classList.add('active');
+      mobileLabel.classList.remove('active');
+    } else {
+      identifierInput.placeholder = "Enter Mobile Number";
+      dynamicIcon.className = "fas fa-mobile-alt input-icon";
+      mobileLabel.classList.add('active');
+      useridLabel.classList.remove('active');
+    }
+  }
+  useridLabel.addEventListener('click', () => { useridRadio.checked = true; updateLoginUI(); });
+  mobileLabel.addEventListener('click', () => { mobileRadio.checked = true; updateLoginUI(); });
+  updateLoginUI();
+
+  loginBtn.addEventListener('click', () => {
+    if (identifierInput.value.trim() === "" || passwordInput.value.trim() === "") {
+      loginError.style.display = 'block';
+      loginError.innerText = "⚠️ Please fill both fields";
+      return;
+    }
+    loginError.style.display = 'none';
+    loginOverlay.style.display = 'none';
+    mainWebsite.style.display = 'block';
+  });
+
+  document.getElementById('logoutBtnMain').addEventListener('click', () => {
+    mainWebsite.style.display = 'none';
+    loginOverlay.style.display = 'flex';
+    identifierInput.value = '';
+    passwordInput.value = '';
+    loginError.style.display = 'none';
+  });
+
+  // Booking
+  const exploreBtn = document.getElementById('exploreCafeBtn');
+  const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+  exploreBtn.addEventListener('click', () => bookingModal.show());
+  document.getElementById('bookingForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('bookingName').value;
+    const email = document.getElementById('bookingEmail').value;
+    const phone = document.getElementById('bookingPhone').value;
+    const date = document.getElementById('bookingDate').value;
+    const time = document.getElementById('bookingTime').value;
+    const guests = document.getElementById('bookingGuests').value;
+    if (name && email && phone && date && time) {
+      document.getElementById('bookingMessage').innerHTML = `<span class="text-success">✅ Thank you ${name}! Your table for ${guests} on ${date} at ${time} is requested. We'll confirm via email.</span>`;
+      document.getElementById('bookingForm').reset();
+      setTimeout(() => bookingModal.hide(), 2500);
+    } else {
+      document.getElementById('bookingMessage').innerHTML = `<span class="text-danger">⚠️ Please fill all fields.</span>`;
+    }
+  });
+</script>
+</body>
+</html>

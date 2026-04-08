@@ -1,0 +1,45 @@
+
+---
+
+## 🧪 Testing Credentials (demo)
+
+- **User ID / Mobile:** anything (e.g., `coffee_lover`, `9876543210`)  
+- **Password:** anything (e.g., `123456`)  
+
+*The login is a front‑end gate – any non‑empty input works.*
+
+---
+
+## 📸 Screenshots
+
+| Login Screen | Carousel & Menu |
+|--------------|----------------|
+| (add screenshot) | (add screenshot) |
+
+---
+
+## 🌐 Deployment
+
+Deploy instantly on:
+
+- **Netlify** – drag & drop `index.html` onto [app.netlify.com/drop](https://app.netlify.com/drop)  
+- **Vercel** – `vercel --prod` or drag to [vercel.com/new](https://vercel.com/new)  
+- **GitHub Pages** – push to a repo and enable Pages  
+
+---
+
+## 📄 License
+
+MIT – free to use, modify, and distribute.
+
+---
+
+## 🙌 Acknowledgements
+
+- Images: [Unsplash](https://unsplash.com)  
+- Icons: [Font Awesome](https://fontawesome.com)  
+- Framework: [Bootstrap](https://getbootstrap.com)  
+
+---
+
+**Enjoy your virtual coffee at Mellow Brew!** ☕
